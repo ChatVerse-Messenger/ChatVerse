@@ -13,17 +13,15 @@
       --bg-chat: #0b141a;
       --bg-input: #1d232a;
       --accent-primary: #00a884;
-      --accent-hover: #00c89e;
       --text-main: #e9edef;
       --text-muted: #8696a0;
       --border-color: #222d34;
-      --modal-bg: rgba(0, 0, 0, 0.85);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { height: 100vh; background: var(--bg-main); color: var(--text-main); overflow: hidden; }
 
-    /* --- ANIMATIONS --- */
+    /* --- RAINBOW OWNER --- */
     @keyframes rainbowText {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -43,68 +41,39 @@
       margin-left: 8px; font-weight: 800; text-transform: uppercase;
     }
 
-    #app { display: flex; height: 100vh; }
+    /* --- AUTH SCREEN --- */
+    .auth-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+    .auth-card { background: var(--bg-sidebar); padding: 30px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .auth-logo { color: var(--accent-primary); font-size: 32px; font-weight: 800; margin-bottom: 5px; }
+    
+    .auth-tabs { display: flex; margin-bottom: 25px; background: var(--bg-input); border-radius: 10px; padding: 5px; }
+    .auth-tab { flex: 1; padding: 10px; cursor: pointer; border-radius: 8px; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+    .auth-tab.active { background: var(--accent-primary); color: white; }
 
-    /* --- SIDEBAR --- */
+    .input-group { text-align: left; width: 100%; margin-bottom: 15px; }
+    .input-group label { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
+    
+    .profile-input { width: 100%; background: var(--bg-input); border: 1px solid #2a333c; padding: 12px; border-radius: 10px; color: white; outline: none; }
+    .profile-input:focus { border-color: var(--accent-primary); }
+    
+    .save-btn { width: 100%; padding: 16px; background: var(--accent-primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+    /* --- MODALS --- */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(4px); }
+    .modal-overlay.active { display: flex; }
+    .modal-card { background: var(--bg-sidebar); padding: 25px; border-radius: 20px; width: 90%; max-width: 380px; text-align: center; border: 1px solid var(--border-color); }
+
+    /* --- SIDEBAR & CHAT --- */
+    #app { display: flex; height: 100vh; }
     .sidebar { width: 350px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
     .sidebar-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-header); }
-    
-    .new-chat-btn {
-      background: var(--bg-input);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.05);
-      padding: 18px 20px;
-      margin: 15px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 16px;
-      cursor: pointer;
-      text-align: left;
-    }
-
+    .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #333; }
+    .new-chat-btn { background: var(--bg-input); color: white; border: 1px solid rgba(255,255,255,0.05); padding: 18px 20px; margin: 15px; border-radius: 12px; font-weight: 600; cursor: pointer; text-align: left; }
     .chat-list { flex: 1; overflow-y: auto; }
     .chat-item { padding: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); }
-    .chat-item.active { background: rgba(255,255,255,0.1); }
+    .chat-item.active { background: rgba(255,255,255,0.08); }
 
-    .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #333; }
-
-    /* --- CUSTOM MODAL SYSTEM (No more Popups!) --- */
-    .modal-overlay {
-      position: fixed; inset: 0; background: var(--modal-bg);
-      display: none; align-items: center; justify-content: center; z-index: 1000;
-      backdrop-filter: blur(5px);
-    }
-    .modal-overlay.active { display: flex; }
-    .modal-card {
-      background: var(--bg-sidebar); padding: 30px; border-radius: 20px;
-      width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--border-color);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    }
-    .modal-card h2 { margin-bottom: 15px; font-size: 20px; }
-    .modal-input {
-      width: 100%; background: var(--bg-input); border: 1px solid #2a333c;
-      padding: 14px; border-radius: 10px; color: white; outline: none; margin-bottom: 20px;
-    }
-
-    /* --- PROFILE VIEW --- */
-    .profile-view {
-      position: fixed; inset: 0; background: #0f171e; z-index: 100;
-      display: none; flex-direction: column;
-    }
-    .profile-view.active { display: flex; }
-    .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; font-size: 18px; font-weight: bold; background: var(--bg-header); }
-    .profile-content { max-width: 400px; margin: 0 auto; width: 100%; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
-    
-    .pfp-main { width: 130px; height: 130px; border-radius: 50%; border: 4px solid #1d232a; cursor: pointer; }
-    .profile-name-display { font-size: 24px; font-weight: bold; margin-top: 15px; display: flex; align-items: center; }
-
-    .save-btn {
-      width: 100%; padding: 16px; background: var(--accent-primary); color: white;
-      border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px;
-    }
-
-    /* --- MAIN CHAT AREA --- */
-    .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); }
+    .main-chat { flex: 1; display: flex; flex-direction: column; }
     .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
     .message { max-width: 70%; padding: 12px 16px; border-radius: 12px; font-size: 14px; }
     .sent { align-self: flex-end; background: var(--accent-primary); color: white; }
@@ -112,66 +81,82 @@
     .input-area { padding: 15px; background: var(--bg-header); display: flex; gap: 12px; }
     .chat-field { flex: 1; background: var(--bg-input); border: none; padding: 14px; border-radius: 25px; color: white; outline: none; }
 
+    /* --- PROFILE VIEW --- */
+    .profile-view { position: fixed; inset: 0; background: #0f171e; z-index: 100; display: none; flex-direction: column; }
+    .profile-view.active { display: flex; }
+    .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; font-size: 18px; font-weight: bold; background: var(--bg-header); }
+    .profile-content { max-width: 400px; margin: 0 auto; width: 100%; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+
     .hidden { display: none; }
   </style>
 </head>
 <body>
 
   <!-- AUTH SCREEN -->
-  <div id="authScreen" class="auth-screen" style="position:fixed; inset:0; background:var(--bg-main); z-index:2000; display:flex; align-items:center; justify-content:center;">
-    <div style="background:var(--bg-sidebar); padding:40px; border-radius:24px; width:90%; max-width:400px; text-align:center; border:1px solid var(--border-color);">
-      <h2 style="color:var(--accent-primary); margin-bottom:20px;">ChatVerse</h2>
-      <input type="text" id="loginUser" class="modal-input" placeholder="Username">
-      <input type="password" id="loginPass" class="modal-input" placeholder="Password">
-      <button class="save-btn" onclick="handleLogin()">Sign In</button>
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">ChatVerse</div>
+      
+      <div class="auth-tabs">
+        <div id="loginTab" class="auth-tab active" onclick="setAuthMode('login')">Login</div>
+        <div id="signupTab" class="auth-tab" onclick="setAuthMode('signup')">Sign Up</div>
+      </div>
+
+      <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="authUsername" class="profile-input" placeholder="Enter username">
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="authPassword" class="profile-input" placeholder="Enter password">
+      </div>
+
+      <!-- Signup Only Fields -->
+      <div id="signupFields" class="hidden">
+        <div class="input-group">
+          <label>Display Name</label>
+          <input type="text" id="authDisplayName" class="profile-input" placeholder="How others see you">
+        </div>
+        <div class="input-group">
+            <label>Profile Picture URL</label>
+            <input type="text" id="authPfpUrl" class="profile-input" placeholder="Paste image link">
+          </div>
+      </div>
+
+      <button id="authBtn" class="save-btn" onclick="handleAuth()">Sign In</button>
+      <p id="authMessage" style="margin-top:15px; font-size:12px; color:red;"></p>
     </div>
   </div>
 
-  <!-- CUSTOM MODAL: NEW CHAT -->
+  <!-- MODALS -->
   <div id="newChatModal" class="modal-overlay">
     <div class="modal-card">
-      <h2>Start New Chat</h2>
-      <input type="text" id="newChatUser" class="modal-input" placeholder="Enter target username...">
-      <div style="display:flex; gap:10px;">
+      <h2>New Chat</h2>
+      <input type="text" id="newChatUser" class="modal-input profile-input" placeholder="Enter username..." style="margin-top:15px;">
+      <div style="display:flex; gap:10px; margin-top:20px;">
         <button class="save-btn" style="background:#333;" onclick="closeModals()">Cancel</button>
-        <button class="save-btn" onclick="confirmNewChat()">Start Chat</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CUSTOM MODAL: CHANGE PFP -->
-  <div id="pfpModal" class="modal-overlay">
-    <div class="modal-card">
-      <h2>Change Profile Picture</h2>
-      <p style="font-size:12px; color:gray; margin-bottom:15px;">Upload a file or enter an Image URL</p>
-      <input type="file" id="pfpFile" class="hidden" onchange="uploadPfpFile(this)">
-      <button class="save-btn" style="background:#2a333c; margin-bottom:10px;" onclick="document.getElementById('pfpFile').click()">Choose File from Device</button>
-      <input type="text" id="pfpUrlInput" class="modal-input" placeholder="Or paste Image URL...">
-      <div style="display:flex; gap:10px;">
-        <button class="save-btn" style="background:#333;" onclick="closeModals()">Cancel</button>
-        <button class="save-btn" onclick="confirmPfpUrl()">Save PFP</button>
+        <button class="save-btn" onclick="confirmNewChat()">Start</button>
       </div>
     </div>
   </div>
 
   <div id="app">
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-header">
         <img id="myAvatarIcon" src="" class="avatar" onclick="toggleProfile(true)" style="cursor:pointer">
         <span id="myUsernameDisplay" style="font-weight:700"></span>
         <i class="fa-solid fa-right-from-bracket" onclick="location.reload()" style="cursor:pointer; color:gray"></i>
       </div>
-      <button class="new-chat-btn" onclick="openNewChatModal()">New Chat</button>
+      <button class="new-chat-btn" onclick="openModal('newChatModal')">New Chat</button>
       <div class="chat-list" id="chatList"></div>
     </div>
 
-    <!-- MAIN CHAT -->
     <div class="main-chat">
-      <div id="chatHeader" style="padding:18px; background:var(--bg-header); font-weight:bold;">Select a chat</div>
+      <div id="chatHeader" style="padding:18px; background:var(--bg-header); font-weight:bold; border-bottom:1px solid var(--border-color)">Select a conversation</div>
       <div class="chat-messages" id="chatMessages"></div>
       <div class="input-area">
-        <input type="text" id="msgInput" class="chat-field" placeholder="Type a message...">
+        <input type="text" id="msgInput" class="chat-field" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMsg()">
         <button onclick="sendMsg()" style="background:var(--accent-primary); border:none; width:45px; height:45px; border-radius:50%; color:white; cursor:pointer"><i class="fa-solid fa-paper-plane"></i></button>
       </div>
     </div>
@@ -180,59 +165,92 @@
   <!-- PROFILE VIEW -->
   <div id="profileView" class="profile-view">
     <div class="profile-header">
-      <i class="fa-solid fa-arrow-left" onclick="toggleProfile(false)" style="cursor:pointer"></i>
-      <span>My Profile</span>
+        <i class="fa-solid fa-arrow-left" onclick="toggleProfile(false)" style="cursor:pointer"></i>
+        <span>My Profile</span>
     </div>
     <div class="profile-content">
-      <div style="position:relative" onclick="openPfpModal()">
-        <img id="profilePfp" src="" class="pfp-main">
-        <div style="position:absolute; bottom:5px; right:5px; background:var(--accent-primary); width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:3px solid #0f171e"><i class="fa-solid fa-camera" style="color:white; font-size:14px"></i></div>
-      </div>
-      <div class="profile-name-display">
-        <span id="displayNameView"></span>
-        <span id="badgeView" class="owner-badge">OWNER</span>
-      </div>
-      <div style="width:100%; margin-top:30px;">
-        <label style="font-size:12px; color:gray; text-transform:uppercase;">Display Name</label>
-        <input type="text" id="editName" class="modal-input" oninput="syncPreview()">
-        <label style="font-size:12px; color:gray; text-transform:uppercase;">Badge Text</label>
-        <input type="text" id="editBadge" class="modal-input" oninput="syncPreview()">
-        <button class="save-btn" onclick="saveProfile()">Save Profile</button>
-      </div>
+        <img id="profilePfp" src="" class="profile-pfp avatar" style="width:130px; height:130px; border:4px solid var(--bg-input);">
+        <div class="profile-name-display">
+            <span id="displayNameView"></span>
+            <span id="badgeView" class="owner-badge">OWNER</span>
+        </div>
+        <div class="input-group" style="margin-top:30px;">
+            <label>Display Name</label>
+            <input type="text" id="editName" class="profile-input" oninput="syncPreview()">
+        </div>
+        <div class="input-group">
+            <label>PFP URL</label>
+            <input type="text" id="editPfp" class="profile-input" oninput="syncPreview()">
+        </div>
+        <div class="input-group">
+            <label>Badge</label>
+            <input type="text" id="editBadge" class="profile-input" oninput="syncPreview()">
+        </div>
+        <button class="save-btn" onclick="saveProfile()">Save Changes</button>
     </div>
   </div>
 
   <script>
     const _KEY = "YXluem9uZWxvdmVyaXNraw==";
+    let currentAuthMode = 'login';
     let currentUser = null;
     let users = JSON.parse(localStorage.getItem('cv_users')) || {};
     let messages = JSON.parse(localStorage.getItem('cv_msgs')) || [];
     let activeChat = null;
 
-    function handleLogin() {
-      const u = document.getElementById('loginUser').value.toLowerCase();
-      const p = document.getElementById('loginPass').value;
-      if(u === 'owner' && btoa(p) === _KEY) {
-        if(!users[u]) users[u] = { username: 'owner', name: 'AynzonePlayz[OWNER]', badge: 'OWNER', pfp: 'https://api.dicebear.com/7.x/bottts/svg?seed=vampire' };
-        currentUser = users[u];
-      } else if (u && p) {
-        if(!users[u]) users[u] = { username: u, name: u, badge: '', pfp: `https://api.dicebear.com/7.x/avataaars/svg?seed=${u}` };
+    function setAuthMode(mode) {
+      currentAuthMode = mode;
+      document.getElementById('loginTab').classList.toggle('active', mode === 'login');
+      document.getElementById('signupTab').classList.toggle('active', mode === 'signup');
+      document.getElementById('signupFields').classList.toggle('hidden', mode === 'login');
+      document.getElementById('authBtn').innerText = mode === 'login' ? 'Sign In' : 'Create Account';
+      document.getElementById('authMessage').innerText = '';
+    }
+
+    function handleAuth() {
+      const u = document.getElementById('authUsername').value.trim().toLowerCase();
+      const p = document.getElementById('authPassword').value;
+      const msg = document.getElementById('authMessage');
+
+      if (!u || !p) { msg.innerText = "Fields cannot be empty"; return; }
+
+      if (currentAuthMode === 'login') {
+        // Owner Check
+        if (u === 'owner' && btoa(p) === _KEY) {
+          if (!users[u]) users[u] = { username: 'owner', name: 'AynzonePlayz[OWNER]', badge: 'OWNER', pfp: 'https://api.dicebear.com/7.x/bottts/svg?seed=vampire' };
+          currentUser = users[u];
+        } 
+        // Regular User Check
+        else if (users[u] && users[u].password === p) {
+          currentUser = users[u];
+        } else {
+          msg.innerText = "Invalid username or password";
+          return;
+        }
+      } else {
+        // Sign Up Logic
+        if (users[u]) { msg.innerText = "Username already exists"; return; }
+        const dn = document.getElementById('authDisplayName').value.trim() || u;
+        const pfp = document.getElementById('authPfpUrl').value.trim() || `https://api.dicebear.com/7.x/avataaars/svg?seed=${u}`;
+        
+        users[u] = { username: u, password: p, name: dn, badge: '', pfp: pfp };
+        localStorage.setItem('cv_users', JSON.stringify(users));
         currentUser = users[u];
       }
-      if(currentUser) { document.getElementById('authScreen').style.display = 'none'; loadApp(); }
+
+      document.getElementById('authScreen').style.display = 'none';
+      loadApp();
     }
 
     function loadApp() {
       document.getElementById('myAvatarIcon').src = currentUser.pfp;
-      const nameDisp = document.getElementById('myUsernameDisplay');
-      nameDisp.innerText = currentUser.name;
-      nameDisp.className = currentUser.username === 'owner' ? 'rainbow-text' : '';
+      const n = document.getElementById('myUsernameDisplay');
+      n.innerText = currentUser.name;
+      n.className = currentUser.username === 'owner' ? 'rainbow-text' : '';
       renderChatList();
     }
 
-    // Modal Handlers
-    function openNewChatModal() { document.getElementById('newChatModal').classList.add('active'); }
-    function openPfpModal() { document.getElementById('pfpModal').classList.add('active'); }
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
 
     function confirmNewChat() {
@@ -245,31 +263,11 @@
       }
     }
 
-    function confirmPfpUrl() {
-      const url = document.getElementById('pfpUrlInput').value;
-      if(url) {
-        currentUser.pfp = url;
-        document.getElementById('profilePfp').src = url;
-        closeModals();
-      }
-    }
-
-    function uploadPfpFile(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          currentUser.pfp = e.target.result;
-          document.getElementById('profilePfp').src = e.target.result;
-          closeModals();
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
     function toggleProfile(show) {
       if(show) {
         document.getElementById('profilePfp').src = currentUser.pfp;
         document.getElementById('editName').value = currentUser.name;
+        document.getElementById('editPfp').value = currentUser.pfp;
         document.getElementById('editBadge').value = currentUser.badge;
         syncPreview();
         document.getElementById('profileView').classList.add('active');
@@ -279,16 +277,19 @@
     function syncPreview() {
       const name = document.getElementById('editName').value;
       const badge = document.getElementById('editBadge').value;
-      const nameEl = document.getElementById('displayNameView');
-      nameEl.innerText = name || currentUser.username;
-      if(currentUser.username === 'owner') nameEl.className = 'rainbow-text';
-      const bView = document.getElementById('badgeView');
-      bView.innerText = badge;
-      bView.style.display = badge ? 'inline-block' : 'none';
+      const pfp = document.getElementById('editPfp').value;
+      
+      document.getElementById('displayNameView').innerText = name || currentUser.username;
+      document.getElementById('profilePfp').src = pfp || currentUser.pfp;
+      
+      const b = document.getElementById('badgeView');
+      b.innerText = badge;
+      b.style.display = badge ? 'inline-block' : 'none';
     }
 
     function saveProfile() {
       currentUser.name = document.getElementById('editName').value;
+      currentUser.pfp = document.getElementById('editPfp').value;
       currentUser.badge = document.getElementById('editBadge').value;
       users[currentUser.username] = currentUser;
       localStorage.setItem('cv_users', JSON.stringify(users));
@@ -312,7 +313,7 @@
 
     function renderMessages() {
       if(!activeChat) return;
-      document.getElementById('chatHeader').innerText = "Chatting with: " + activeChat;
+      document.getElementById('chatHeader').innerText = activeChat;
       const container = document.getElementById('chatMessages');
       container.innerHTML = '';
       messages.filter(m => (m.from === currentUser.username && m.to === activeChat) || (m.from === activeChat && m.to === currentUser.username))
