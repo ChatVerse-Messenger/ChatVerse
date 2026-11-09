@@ -3,1093 +3,322 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ChatVerse - Next-Gen Web & Mobile Messenger</title>
+  <title>ChatVerse Messenger</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* ==========================================================================
-       THEME & DESIGN SYSTEM (WhatsApp + Discord Hybrid)
-       ========================================================================== */
     :root {
       --bg-main: #0b141a;
       --bg-sidebar: #111b21;
       --bg-header: #202c33;
       --bg-chat: #0b141a;
-      --bg-input: #2a3942;
-      --bg-bubble-self: #005c4b;
-      --bg-bubble-other: #202c33;
+      --bg-input: #1d232a; /* Matched from screenshot */
       --accent-primary: #00a884;
-      --accent-hover: #00c89e;
-      --accent-glow: rgba(0, 168, 132, 0.4);
       --text-main: #e9edef;
       --text-muted: #8696a0;
-      --text-dim: #667781;
       --border-color: #222d34;
-      --danger: #ea4335;
-      --sidebar-width: 340px;
+      --sidebar-width: 350px;
     }
 
-    /* Preset App Themes */
-    body.theme-discord {
-      --bg-main: #313338;
-      --bg-sidebar: #2b2d31;
-      --bg-header: #1e1f22;
-      --bg-chat: #313338;
-      --bg-input: #383a40;
-      --bg-bubble-self: #5865f2;
-      --bg-bubble-other: #2b2d31;
-      --accent-primary: #5865f2;
-      --accent-hover: #4752c4;
-      --accent-glow: rgba(88, 101, 242, 0.4);
-    }
-    body.theme-midnight {
-      --bg-main: #000000;
-      --bg-sidebar: #0a0a0a;
-      --bg-header: #121212;
-      --bg-chat: #050505;
-      --bg-input: #1a1a1a;
-      --bg-bubble-self: #2563eb;
-      --bg-bubble-other: #18181b;
-      --accent-primary: #3b82f6;
-      --accent-hover: #60a5fa;
-      --accent-glow: rgba(59, 130, 246, 0.4);
-    }
-    body.theme-cyberpunk {
-      --bg-main: #0d021a;
-      --bg-sidebar: #15052a;
-      --bg-header: #1f083d;
-      --bg-chat: #0d021a;
-      --bg-input: #2a0c52;
-      --bg-bubble-self: #ff007f;
-      --bg-bubble-other: #230b42;
-      --accent-primary: #ff007f;
-      --accent-hover: #ff3399;
-      --accent-glow: rgba(255, 0, 127, 0.4);
-    }
-    body.theme-sunset {
-      --bg-main: #140d0a;
-      --bg-sidebar: #1e130f;
-      --bg-header: #281a14;
-      --bg-chat: #140d0a;
-      --bg-input: #38241c;
-      --bg-bubble-self: #d97706;
-      --bg-bubble-other: #261710;
-      --accent-primary: #f59e0b;
-      --accent-hover: #fbbf24;
-      --accent-glow: rgba(245, 158, 11, 0.4);
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { height: 100vh; background: var(--bg-main); color: var(--text-main); overflow: hidden; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
-    html, body { height: 100%; width: 100%; overflow: hidden; background: var(--bg-main); color: var(--text-main); }
-
-    /* Keyframe Animations */
-    @keyframes rainbowMove {
+    /* --- RAINBOW ANIMATION --- */
+    @keyframes rainbowText {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    @keyframes neonPulse {
-      0%, 100% { text-shadow: 0 0 5px #a855f7, 0 0 10px #a855f7, 0 0 15px #06b6d4; }
-      50% { text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 25px #06b6d4; }
-    }
-    @keyframes fireGlow {
-      0%, 100% { text-shadow: 0 0 4px #ef4444, 0 0 8px #f97316; color: #fee2e2; }
-      50% { text-shadow: 0 0 10px #ef4444, 0 0 18px #f97316; color: #ffffff; }
-    }
-
-    /* Name & Text Styling Effects */
     .rainbow-text {
-      background: linear-gradient(90deg, #ff0055, #ff5000, #ffcc00, #00ff66, #00ccff, #9900ff, #ff0055);
-      background-size: 300% 300%;
+      background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff0000);
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: rainbowMove 4s ease infinite;
-      font-weight: 700;
+      animation: rainbowText 3s linear infinite;
+      font-weight: bold;
     }
-    .gold-text {
-      background: linear-gradient(135deg, #ffe066 0%, #f59e0b 50%, #b45309 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: 700;
-      text-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
-    }
-    .neon-text {
-      color: #38bdf8;
-      animation: neonPulse 2s infinite alternate;
-      font-weight: 700;
-    }
-    .fire-text {
-      animation: fireGlow 1.5s infinite alternate;
-      font-weight: 700;
+    .owner-badge {
+      background: linear-gradient(135deg, #00c89e, #005c4b);
+      color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px;
+      margin-left: 8px; font-weight: 800; text-transform: uppercase;
     }
 
-    /* Custom Badges */
-    .user-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2px 7px;
-      font-size: 10px;
-      font-weight: 800;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      vertical-align: middle;
-      margin-left: 6px;
-      line-height: 1.2;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    }
-    .badge-rainbow {
-      background: linear-gradient(135deg, #ff007f, #7928ca, #ff0000);
-      background-size: 200% 200%;
-      animation: rainbowMove 3s ease infinite;
-      color: #fff;
-    }
-    .badge-emerald { background: #00a884; color: #fff; }
-    .badge-gold { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 900; }
-    .badge-neon { background: #8b5cf6; color: #fff; box-shadow: 0 0 8px #8b5cf6; }
-    .badge-crimson { background: #dc2626; color: #fff; }
+    /* --- LAYOUT --- */
+    #app { display: flex; height: 100vh; }
 
-    /* App Layout */
-    #app { display: flex; width: 100vw; height: 100vh; overflow: hidden; position: relative; }
-
-    /* Auth Overlay Screen */
-    .auth-overlay {
-      position: fixed; inset: 0; background: var(--bg-main); z-index: 1000;
-      display: flex; align-items: center; justify-content: center; padding: 20px;
+    /* --- SIDEBAR --- */
+    .sidebar { width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+    .sidebar-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-header); }
+    
+    /* NEW CHAT BUTTON (From Screenshot) */
+    .new-chat-btn {
+      background: var(--bg-input);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 18px 20px;
+      margin: 15px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.2s;
     }
-    .auth-card {
-      background: var(--bg-sidebar); border: 1px solid var(--border-color);
-      border-radius: 16px; padding: 32px; width: 100%; max-width: 420px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
-    }
-    .auth-card h1 { font-size: 26px; color: var(--accent-primary); margin-bottom: 8px; font-weight: 800; }
-    .auth-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
-    .auth-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: var(--bg-header); padding: 4px; border-radius: 8px; }
-    .auth-tab { flex: 1; padding: 10px; background: transparent; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; border-radius: 6px; }
-    .auth-tab.active { background: var(--accent-primary); color: #fff; }
-    .form-group { text-align: left; margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
-    .form-input {
-      width: 100%; padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border-color);
-      border-radius: 8px; color: var(--text-main); font-size: 14px; outline: none; transition: border-color 0.2s;
-    }
-    .form-input:focus { border-color: var(--accent-primary); }
-    .auth-btn {
-      width: 100%; padding: 14px; background: var(--accent-primary); color: #fff; border: none;
-      border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 10px;
-    }
-    .auth-btn:hover { background: var(--accent-hover); }
-
-    /* Sidebar */
-    .sidebar {
-      width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 1px solid var(--border-color);
-      display: flex; flex-direction: column; height: 100%; position: relative; flex-shrink: 0; z-index: 10;
-    }
-    .sidebar-resizer {
-      position: absolute; right: -4px; top: 0; width: 8px; height: 100%;
-      cursor: col-resize; z-index: 30; transition: background 0.2s;
-    }
-    .sidebar-resizer:hover, .sidebar-resizer.active { background: var(--accent-primary); }
-
-    .sidebar-header {
-      height: 64px; background: var(--bg-header); padding: 10px 16px; display: flex;
-      align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color);
-    }
-    .user-info { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; cursor: pointer; }
-    .avatar {
-      width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
-      background: var(--bg-input); flex-shrink: 0; border: 2px solid transparent; transition: transform 0.2s;
-    }
-    .avatar:hover { transform: scale(1.05); }
-    .user-details { flex: 1; min-width: 0; overflow: hidden; }
-    .user-name-row { display: flex; align-items: center; gap: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .user-status-text { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .header-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-    .icon-btn {
-      width: 36px; height: 36px; border-radius: 50%; border: none; background: transparent;
-      color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 16px; transition: 0.2s;
-    }
-    .icon-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-main); }
-
-    .search-container { padding: 10px 12px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); }
-    .search-box {
-      background: var(--bg-input); border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 10px;
-    }
-    .search-box input { background: transparent; border: none; outline: none; color: var(--text-main); font-size: 14px; width: 100%; }
+    .new-chat-btn:hover { background: #2a333c; }
 
     .chat-list { flex: 1; overflow-y: auto; }
-    .chat-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer;
-      border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.2s;
-    }
+    .chat-item { padding: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .chat-item:hover { background: rgba(255,255,255,0.05); }
-    .chat-item.active { background: rgba(255,255,255,0.1); }
-    .chat-meta { flex: 1; min-width: 0; }
-    .chat-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .chat-title { font-weight: 600; font-size: 15px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .chat-time { font-size: 11px; color: var(--text-dim); flex-shrink: 0; }
-    .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .unread-badge {
-      background: var(--accent-primary); color: #fff; font-size: 11px; font-weight: 700;
-      border-radius: 10px; padding: 2px 7px; margin-left: 6px; flex-shrink: 0;
-    }
 
-    /* Main Chat Area */
-    .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); height: 100%; min-width: 0; }
-    .chat-header {
-      height: 64px; background: var(--bg-header); padding: 10px 20px; display: flex;
-      align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color);
-    }
-    .chat-header-user { display: flex; align-items: center; gap: 14px; min-width: 0; }
-    .chat-messages {
-      flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0); background-size: 24px 24px;
-    }
+    .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #333; }
 
-    .message { display: flex; flex-direction: column; max-width: 65%; font-size: 14px; position: relative; }
-    .message.sent { align-self: flex-end; }
-    .message.received { align-self: flex-start; }
-
-    .message-content {
-      padding: 10px 14px; border-radius: 12px; background: var(--bg-bubble-other);
-      color: var(--text-main); word-wrap: break-word; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .message.sent .message-content { background: var(--bg-bubble-self); }
-    .message-sender { font-size: 12px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; }
-    .message-meta { display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-size: 10px; color: var(--text-dim); margin-top: 4px; }
-    .message.sent .message-meta { color: rgba(255,255,255,0.7); }
-
-    .chat-input-area { background: var(--bg-header); padding: 12px 16px; display: flex; align-items: center; gap: 10px; position: relative; }
-    .chat-input {
-      flex: 1; background: var(--bg-input); border: none; padding: 12px 16px; border-radius: 24px;
-      color: var(--text-main); font-size: 15px; outline: none;
-    }
-    .send-btn {
-      width: 44px; height: 44px; border-radius: 50%; background: var(--accent-primary); border: none;
-      color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s, background 0.2s; flex-shrink: 0;
-    }
-    .send-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
-
-    /* Customization View / Modal (Matches User Screenshot) */
+    /* --- PROFILE VIEW (From Screenshot) --- */
     .profile-view {
-      position: absolute; inset: 0; background: var(--bg-main); z-index: 50;
-      display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease;
+      position: fixed; inset: 0; background: #0f171e; z-index: 100;
+      display: none; flex-direction: column;
     }
-    .profile-view.active { transform: translateX(0); }
-    .profile-header {
-      height: 64px; background: var(--bg-header); padding: 0 20px; display: flex;
-      align-items: center; gap: 20px; border-bottom: 1px solid var(--border-color); font-size: 18px; font-weight: 700;
-    }
-    .profile-body { flex: 1; overflow-y: auto; padding: 30px 20px; max-width: 500px; margin: 0 auto; width: 100%; }
-
-    .pfp-upload-container { text-align: center; margin-bottom: 24px; position: relative; }
-    .pfp-preview-wrapper {
-      position: relative; width: 110px; height: 110px; margin: 0 auto 12px; cursor: pointer;
-    }
-    .pfp-preview-wrapper .avatar { width: 110px; height: 110px; border: 3px solid var(--accent-primary); box-shadow: 0 0 15px var(--accent-glow); }
-    .pfp-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,0.6); border-radius: 50%;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s;
-    }
-    .pfp-preview-wrapper:hover .pfp-overlay { opacity: 1; }
-    .pfp-overlay i { font-size: 24px; color: #fff; margin-bottom: 4px; }
-    .pfp-hint { font-size: 12px; color: var(--text-muted); }
-
-    .profile-card-preview {
-      background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 12px;
-      padding: 16px; margin-bottom: 24px; text-align: center;
-    }
-    .preview-title { font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
-
-    /* Picker Components */
-    .picker-drawer {
-      position: absolute; bottom: 70px; left: 16px; width: 340px; height: 320px;
-      background: var(--bg-header); border: 1px solid var(--border-color); border-radius: 12px;
-      display: none; flex-direction: column; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;
-    }
-    .picker-drawer.active { display: flex; }
-    .picker-tabs { display: flex; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); }
-    .picker-tab { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 600; }
-    .picker-tab.active { color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); }
-    .picker-content { flex: 1; overflow-y: auto; padding: 12px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-size: 20px; }
-    .gif-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
-    .gif-item { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; cursor: pointer; }
-
-    /* Utility Helpers */
-    .hidden { display: none !important; }
-    .select-input {
-      width: 100%; padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border-color);
-      border-radius: 8px; color: var(--text-main); font-size: 14px; outline: none; cursor: pointer;
+    .profile-view.active { display: flex; }
+    .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; font-size: 18px; font-weight: bold; }
+    
+    .profile-content { 
+      max-width: 400px; margin: 0 auto; width: 100%; padding: 20px; 
+      display: flex; flex-direction: column; align-items: center;
     }
 
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      .sidebar { width: 100% !important; flex: 1; }
-      .main-chat { display: none; width: 100%; }
-      .main-chat.mobile-active { display: flex; position: absolute; inset: 0; z-index: 40; }
-      .sidebar-resizer { display: none; }
+    .pfp-container { position: relative; margin-bottom: 20px; }
+    .pfp-main { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #1d232a; }
+    
+    .profile-name-display { font-size: 22px; font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; }
+    .pfp-hint { color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
+
+    .input-group { width: 100%; margin-bottom: 20px; text-align: left; }
+    .input-group label { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; }
+    .profile-input {
+      width: 100%; background: var(--bg-input); border: 1px solid #2a333c;
+      padding: 12px; border-radius: 8px; color: white; outline: none;
     }
+
+    .save-btn {
+      width: 100%; padding: 15px; background: #00a884; color: white;
+      border: none; border-radius: 12px; font-weight: bold; font-size: 16px;
+      cursor: pointer; margin-top: 10px;
+    }
+
+    /* --- MAIN CHAT --- */
+    .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); }
+    .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .message { max-width: 70%; padding: 10px 15px; border-radius: 10px; font-size: 14px; }
+    .sent { align-self: flex-end; background: var(--accent-primary); color: white; }
+    .received { align-self: flex-start; background: var(--bg-header); color: white; }
+    
+    .input-area { padding: 15px; background: var(--bg-header); display: flex; gap: 10px; }
+    .chat-field { flex: 1; background: var(--bg-input); border: none; padding: 12px; border-radius: 8px; color: white; outline: none; }
+
+    /* --- AUTH --- */
+    .auth-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 200; display: flex; align-items: center; justify-content: center; }
+    .auth-card { background: var(--bg-sidebar); padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
   </style>
 </head>
 <body>
 
-  <div id="app">
-    <!-- AUTHENTICATION OVERLAY -->
-    <div id="authOverlay" class="auth-overlay">
-      <div class="auth-card">
-        <h1>ChatVerse</h1>
-        <p>Next-Gen Cross-Platform Messenger</p>
-        
-        <div class="auth-tabs">
-          <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
-          <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
-        </div>
-
-        <form id="authForm" onsubmit="handleAuthSubmit(event)">
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="authUsername" class="form-input" placeholder="Enter username" required />
-          </div>
-
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="authPassword" class="form-input" placeholder="Enter password" required />
-          </div>
-
-          <div id="signupFields" class="hidden">
-            <div class="form-group">
-              <label>Display Name</label>
-              <input type="text" id="authDisplayName" class="form-input" placeholder="e.g. AynzonePlayz" />
-            </div>
-            <div class="form-group">
-              <label>Profile Avatar</label>
-              <input type="file" id="authPfp" accept="image/*" class="form-input" />
-            </div>
-          </div>
-
-          <button type="submit" id="authSubmitBtn" class="auth-btn">Log In</button>
-        </form>
-      </div>
+  <!-- AUTH SCREEN -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <h2 style="margin-bottom: 20px;">Welcome to ChatVerse</h2>
+      <input type="text" id="loginUser" class="profile-input" style="margin-bottom: 10px;" placeholder="Username">
+      <input type="password" id="loginPass" class="profile-input" style="margin-bottom: 20px;" placeholder="Password">
+      <button class="save-btn" onclick="handleLogin()">Login / Sign Up</button>
+      <p style="margin-top: 15px; font-size: 12px; color: gray;">Owner: owner | aynzoneloverisok</p>
     </div>
+  </div>
 
-    <!-- SIDEBAR PANEL -->
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-resizer" id="sidebarResizer"></div>
-      
+  <div id="app">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
       <div class="sidebar-header">
-        <div class="user-info" onclick="openProfileCustomization()">
-          <img id="userHeaderAvatar" class="avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=user" alt="Avatar" />
-          <div class="user-details">
-            <div class="user-name-row">
-              <span id="userHeaderName" class="font-bold">Username</span>
-              <span id="userHeaderBadge" class="user-badge badge-emerald hidden">BADGE</span>
-            </div>
-            <div id="userHeaderStatus" class="user-status-text">Available</div>
-          </div>
-        </div>
-        <div class="header-actions">
-          <button class="icon-btn" title="New Chat" onclick="promptNewChat()"><i class="fa-solid fa-message"></i></button>
-          <button class="icon-btn" title="Profile & Customization" onclick="openProfileCustomization()"><i class="fa-solid fa-gear"></i></button>
-          <button class="icon-btn" title="Logout" onclick="logout()"><i class="fa-solid fa-door-open"></i></button>
-        </div>
+        <img id="myAvatarIcon" src="" class="avatar" onclick="toggleProfile(true)" style="cursor:pointer">
+        <h3 id="myUsernameDisplay">ChatVerse</h3>
+        <button onclick="location.reload()" style="background:none; border:none; color:white; cursor:pointer"><i class="fa-solid fa-power-off"></i></button>
       </div>
 
-      <div class="search-container">
-        <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass" style="color: var(--text-dim)"></i>
-          <input type="text" placeholder="Search or start new chat" id="chatSearchInput" oninput="filterChats()" />
-        </div>
-      </div>
+      <button class="new-chat-btn" onclick="startNewChat()">New Chat</button>
 
       <div class="chat-list" id="chatList">
-        <!-- Chat Threads Dynamic Injection -->
+        <!-- Chats appear here -->
       </div>
     </div>
 
-    <!-- MAIN CHAT PANEL -->
-    <div class="main-chat" id="mainChat">
-      <div class="chat-header">
-        <div class="chat-header-user">
-          <button class="icon-btn hidden" id="mobileBackBtn" onclick="closeMobileChat()"><i class="fa-solid fa-arrow-left"></i></button>
-          <img id="activeChatAvatar" class="avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=select" alt="Chat Avatar" />
-          <div>
-            <div class="chat-title" id="activeChatTitle">Select a Chat</div>
-            <div style="font-size: 12px; color: var(--text-muted)" id="activeChatStatus">Online</div>
-          </div>
-        </div>
+    <!-- MAIN CHAT -->
+    <div class="main-chat">
+      <div id="chatHeader" style="padding: 15px; background: var(--bg-header); border-bottom: 1px solid var(--border-color); font-weight: bold;">
+        Select a chat to start
       </div>
-
-      <div class="chat-messages" id="chatMessages">
-        <div style="text-align: center; margin-top: 50px; color: var(--text-muted);">
-          <i class="fa-solid fa-comments" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
-          <p>Select a conversation or start a new chat!</p>
-        </div>
-      </div>
-
-      <!-- EMOJI & GIF PICKER DRAWER -->
-      <div class="picker-drawer" id="pickerDrawer">
-        <div class="picker-tabs">
-          <button class="picker-tab active" onclick="switchPickerTab('emojis')">Emojis</button>
-          <button class="picker-tab" onclick="switchPickerTab('flags')">Flags</button>
-          <button class="picker-tab" onclick="switchPickerTab('gifs')">GIFs</button>
-        </div>
-        <div class="picker-content" id="pickerContent"></div>
-      </div>
-
-      <div class="chat-input-area">
-        <button class="icon-btn" onclick="togglePicker()"><i class="fa-solid fa-face-smile"></i></button>
-        <input type="text" class="chat-input" id="messageInput" placeholder="Type a message..." onkeydown="handleInputKey(event)" />
-        <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-      </div>
-    </div>
-
-    <!-- PROFILE CUSTOMIZATION SCREEN (Matches Screenshot) -->
-    <div class="profile-view" id="profileView">
-      <div class="profile-header">
-        <button class="icon-btn" onclick="closeProfileCustomization()"><i class="fa-solid fa-arrow-left"></i></button>
-        <span>My Profile</span>
-      </div>
-
-      <div class="profile-body">
-        <div class="pfp-upload-container">
-          <div class="pfp-preview-wrapper" onclick="triggerPfpUpload()">
-            <img id="customPfpPreview" class="avatar" src="" alt="Profile" />
-            <div class="pfp-overlay">
-              <i class="fa-solid fa-camera"></i>
-            </div>
-          </div>
-          <div class="pfp-hint">Click PFP above to change image</div>
-          <input type="file" id="profilePfpInput" accept="image/*" class="hidden" onchange="handlePfpFileSelect(event)" />
-        </div>
-
-        <div class="profile-card-preview">
-          <div class="preview-title">Live Header Preview</div>
-          <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span id="previewDisplayName" class="font-bold">Name</span>
-            <span id="previewBadge" class="user-badge badge-emerald">BADGE</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Display Name</label>
-          <input type="text" id="editDisplayName" class="form-input" placeholder="Enter display name" oninput="updateProfilePreview()" />
-        </div>
-
-        <div class="form-group">
-          <label>Custom Badge Text</label>
-          <input type="text" id="editCustomBadge" class="form-input" placeholder="e.g. OWNER, VIP, MOD, PRO" oninput="updateProfilePreview()" />
-        </div>
-
-        <div class="form-group">
-          <label>Custom Badge Style</label>
-          <select id="editBadgeStyle" class="select-input" onchange="updateProfilePreview()">
-            <option value="badge-rainbow">👑 Rainbow Animated (Owner / VIP)</option>
-            <option value="badge-emerald">🟢 Emerald Green</option>
-            <option value="badge-gold">💛 Gold VIP</option>
-            <option value="badge-neon">🟣 Neon Purple Glow</option>
-            <option value="badge-crimson">🔴 Crimson Admin</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Name Color / Effect</label>
-          <select id="editNameEffect" class="select-input" onchange="updateProfilePreview()">
-            <option value="none">Standard Text</option>
-            <option value="rainbow-text">🌈 Rainbow Animated Gradient</option>
-            <option value="gold-text">✨ Metallic Gold</option>
-            <option value="neon-text">⚡ Neon Blue Glow</option>
-            <option value="fire-text">🔥 Fire Red Glow</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Status / Bio</label>
-          <input type="text" id="editStatusMessage" class="form-input" placeholder="e.g. Coding ChatVerse..." />
-        </div>
-
-        <div class="form-group">
-          <label>App Color Accent Theme</label>
-          <select id="editAppTheme" class="select-input" onchange="applyAppTheme(this.value)">
-            <option value="default">WhatsApp Dark Emerald</option>
-            <option value="discord">Discord Dark Indigo</option>
-            <option value="midnight">Midnight OLED Black</option>
-            <option value="cyberpunk">Cyberpunk Neon</option>
-            <option value="sunset">Sunset Amber</option>
-          </select>
-        </div>
-
-        <button class="auth-btn" onclick="saveProfileCustomization()">Save Profile</button>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="input-area">
+        <input type="text" id="msgInput" class="chat-field" placeholder="Type a message...">
+        <button onclick="sendMsg()" class="save-btn" style="width: auto; padding: 10px 20px; margin: 0;">Send</button>
       </div>
     </div>
   </div>
 
+  <!-- PROFILE VIEW -->
+  <div id="profileView" class="profile-view">
+    <div class="profile-header">
+      <i class="fa-solid fa-arrow-left" onclick="toggleProfile(false)" style="cursor:pointer"></i>
+      <span>My Profile</span>
+    </div>
+    
+    <div class="profile-content">
+      <div class="pfp-container">
+        <img id="profilePfp" src="https://api.dicebear.com/7.x/avataaars/svg?seed=1" class="pfp-main" onclick="changePfp()">
+      </div>
+      
+      <div class="profile-name-display">
+        <span id="displayNameView">Name</span>
+        <span id="badgeView" class="owner-badge">OWNER</span>
+      </div>
+      <div class="pfp-hint">Click PFP above to change image</div>
+
+      <div class="input-group">
+        <label>Display Name</label>
+        <input type="text" id="editName" class="profile-input" oninput="syncPreview()">
+      </div>
+
+      <div class="input-group">
+        <label>Custom Badge</label>
+        <input type="text" id="editBadge" class="profile-input" oninput="syncPreview()">
+      </div>
+
+      <button class="save-btn" onclick="saveProfile()">Save Profile</button>
+    </div>
+  </div>
+
   <script>
-    /* ==========================================================================
-       CHATVERSE ENGINE & LOGIC
-       ========================================================================== */
-    const STORAGE_USERS = 'chatverse_users_v2';
-    const STORAGE_CURRENT = 'chatverse_current_user_v2';
-    const STORAGE_MESSAGES = 'chatverse_messages_v2';
-    const STORAGE_THEME = 'chatverse_theme_v2';
-
-    let users = {};
     let currentUser = null;
-    let messages = [];
-    let activeChatUsername = null;
-    let broadcastChannel = null;
+    let users = JSON.parse(localStorage.getItem('cv_users')) || {};
+    let messages = JSON.parse(localStorage.getItem('cv_msgs')) || [];
+    let activeChat = null;
 
-    // Hardcoded Owner Credentials Preset
-    const OWNER_ACCOUNT = {
-      username: 'owner',
-      password: 'aynzoneloverisok',
-      displayName: 'AynzonePlayz[OWNER]',
-      customBadge: 'OWNER',
-      badgeStyle: 'badge-rainbow',
-      nameEffect: 'rainbow-text',
-      status: '👑 App Creator & Owner',
-      pfp: 'https://api.dicebear.com/7.x/bottts/svg?seed=AynzonePlayz'
-    };
+    // Login Logic
+    function handleLogin() {
+      const u = document.getElementById('loginUser').value.toLowerCase();
+      const p = document.getElementById('loginPass').value;
 
-    // Initialize App
-    window.addEventListener('DOMContentLoaded', () => {
-      loadStorageData();
-      initBroadcast();
-      initSidebarResize();
-      initTheme();
-
-      if (currentUser) {
-        showApp();
-      } else {
-        showAuth();
-      }
-    });
-
-    // Storage Initialization
-    function loadStorageData() {
-      try {
-        users = JSON.parse(localStorage.getItem(STORAGE_USERS)) || {};
-        currentUser = JSON.parse(localStorage.getItem(STORAGE_CURRENT)) || null;
-        messages = JSON.parse(localStorage.getItem(STORAGE_MESSAGES)) || [];
-      } catch (e) {
-        users = {};
-        currentUser = null;
-        messages = [];
-      }
-
-      // Ensure hardcoded Owner account exists
-      if (!users['owner']) {
-        users['owner'] = OWNER_ACCOUNT;
-        saveUsers();
-      }
-    }
-
-    function saveUsers() { localStorage.setItem(STORAGE_USERS, JSON.stringify(users)); }
-    function saveCurrentUser() { localStorage.setItem(STORAGE_CURRENT, JSON.stringify(currentUser)); }
-    function saveMessages() { 
-      localStorage.setItem(STORAGE_MESSAGES, JSON.stringify(messages)); 
-      if (broadcastChannel) broadcastChannel.postMessage({ type: 'SYNC_MESSAGES', messages });
-    }
-
-    // Real-time Tab Synchronization
-    function initBroadcast() {
-      if ('BroadcastChannel' in window) {
-        broadcastChannel = new BroadcastChannel('chatverse_channel');
-        broadcastChannel.onmessage = (event) => {
-          if (event.data.type === 'SYNC_MESSAGES') {
-            messages = event.data.messages;
-            renderChatList();
-            if (activeChatUsername) renderActiveMessages();
-          } else if (event.data.type === 'SYNC_USERS') {
-            users = event.data.users;
-            renderChatList();
-          }
-        };
-      }
-    }
-
-    // App Theme Management
-    function initTheme() {
-      const savedTheme = localStorage.getItem(STORAGE_THEME) || 'default';
-      applyAppTheme(savedTheme);
-      document.getElementById('editAppTheme').value = savedTheme;
-    }
-
-    function applyAppTheme(themeName) {
-      document.body.className = '';
-      if (themeName !== 'default') {
-        document.body.classList.add(`theme-${themeName}`);
-      }
-      localStorage.setItem(STORAGE_THEME, themeName);
-    }
-
-    // Auth Handlers
-    let authMode = 'login';
-    function switchAuthTab(mode) {
-      authMode = mode;
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById('signupFields').classList.toggle('hidden', mode === 'login');
-      document.getElementById('authSubmitBtn').innerText = mode === 'login' ? 'Log In' : 'Create Account';
-    }
-
-    function handleAuthSubmit(e) {
-      e.preventDefault();
-      const uInput = document.getElementById('authUsername').value.trim().toLowerCase();
-      const pInput = document.getElementById('authPassword').value;
-
-      if (!uInput || !pInput) return;
-
-      if (authMode === 'login') {
-        if (users[uInput] && users[uInput].password === pInput) {
-          currentUser = users[uInput];
-          saveCurrentUser();
-          showApp();
-        } else {
-          alert('Invalid username or password!');
+      if(u === 'owner' && p === 'aynzoneloverisok') {
+        if(!users[u]) {
+          users[u] = { username: 'owner', name: 'AynzonePlayz[OWNER]', badge: 'OWNER', pfp: 'https://api.dicebear.com/7.x/bottts/svg?seed=vampire' };
         }
-      } else {
-        if (users[uInput]) {
-          alert('Username already taken!');
-          return;
-        }
+        currentUser = users[u];
+      } else if (u && p) {
+        if(!users[u]) users[u] = { username: u, name: u, badge: '', pfp: `https://api.dicebear.com/7.x/avataaars/svg?seed=${u}` };
+        currentUser = users[u];
+      }
 
-        const dispName = document.getElementById('authDisplayName').value.trim() || uInput;
-        const pfpInput = document.getElementById('authPfp');
-        
-        let pfpData = `https://api.dicebear.com/7.x/bottts/svg?seed=${uInput}`;
-        
-        const createUser = (pfpUrl) => {
-          const newUser = {
-            username: uInput,
-            password: pInput,
-            displayName: dispName,
-            customBadge: uInput === 'owner' ? 'OWNER' : '',
-            badgeStyle: uInput === 'owner' ? 'badge-rainbow' : 'badge-emerald',
-            nameEffect: uInput === 'owner' ? 'rainbow-text' : 'none',
-            status: 'Available',
-            pfp: pfpUrl
-          };
-          users[uInput] = newUser;
-          saveUsers();
-          currentUser = newUser;
-          saveCurrentUser();
-          showApp();
-        };
-
-        if (pfpInput.files && pfpInput.files[0]) {
-          compressImage(pfpInput.files[0], (base64) => createUser(base64));
-        } else {
-          createUser(pfpData);
-        }
+      if(currentUser) {
+        document.getElementById('authScreen').style.display = 'none';
+        loadApp();
       }
     }
 
-    function logout() {
-      currentUser = null;
-      localStorage.removeItem(STORAGE_CURRENT);
-      document.getElementById('authOverlay').classList.remove('hidden');
-    }
-
-    function showApp() {
-      document.getElementById('authOverlay').classList.add('hidden');
-      updateUserHeaderUI();
+    function loadApp() {
+      document.getElementById('myAvatarIcon').src = currentUser.pfp;
+      document.getElementById('myUsernameDisplay').innerText = currentUser.name;
       renderChatList();
     }
 
-    function showAuth() {
-      document.getElementById('authOverlay').classList.remove('hidden');
-    }
-
-    // User Interface Updating Helpers
-    function updateUserHeaderUI() {
-      if (!currentUser) return;
-      document.getElementById('userHeaderAvatar').src = currentUser.pfp;
-      
-      const nameEl = document.getElementById('userHeaderName');
-      nameEl.innerText = currentUser.displayName || currentUser.username;
-      nameEl.className = `font-bold ${currentUser.nameEffect || ''}`;
-
-      const badgeEl = document.getElementById('userHeaderBadge');
-      if (currentUser.customBadge) {
-        badgeEl.innerText = currentUser.customBadge;
-        badgeEl.className = `user-badge ${currentUser.badgeStyle || 'badge-emerald'}`;
-        badgeEl.classList.remove('hidden');
+    // Profile Logic
+    function toggleProfile(show) {
+      if(show) {
+        document.getElementById('profilePfp').src = currentUser.pfp;
+        document.getElementById('editName').value = currentUser.name;
+        document.getElementById('editBadge').value = currentUser.badge;
+        syncPreview();
+        document.getElementById('profileView').classList.add('active');
       } else {
-        badgeEl.classList.add('hidden');
+        document.getElementById('profileView').classList.remove('active');
       }
-
-      document.getElementById('userHeaderStatus').innerText = currentUser.status || 'Available';
     }
 
-    // Profile & Customization Logic (Matching Screenshot View)
-    function openProfileCustomization() {
-      if (!currentUser) return;
-      document.getElementById('customPfpPreview').src = currentUser.pfp;
-      document.getElementById('editDisplayName').value = currentUser.displayName || '';
-      document.getElementById('editCustomBadge').value = currentUser.customBadge || '';
-      document.getElementById('editBadgeStyle').value = currentUser.badgeStyle || 'badge-rainbow';
-      document.getElementById('editNameEffect').value = currentUser.nameEffect || 'none';
-      document.getElementById('editStatusMessage').value = currentUser.status || '';
+    function syncPreview() {
+      const name = document.getElementById('editName').value;
+      const badge = document.getElementById('editBadge').value;
+      const nameEl = document.getElementById('displayNameView');
       
-      updateProfilePreview();
-      document.getElementById('profileView').classList.add('active');
+      nameEl.innerText = name;
+      if(currentUser.username === 'owner') nameEl.className = 'rainbow-text';
+      
+      const bView = document.getElementById('badgeView');
+      bView.innerText = badge;
+      bView.style.display = badge ? 'inline-block' : 'none';
     }
 
-    function closeProfileCustomization() {
-      document.getElementById('profileView').classList.remove('active');
-    }
-
-    function updateProfilePreview() {
-      const dispName = document.getElementById('editDisplayName').value || currentUser.username;
-      const badgeText = document.getElementById('editCustomBadge').value;
-      const badgeStyle = document.getElementById('editBadgeStyle').value;
-      const nameEffect = document.getElementById('editNameEffect').value;
-
-      const nameEl = document.getElementById('previewDisplayName');
-      nameEl.innerText = dispName;
-      nameEl.className = `font-bold ${nameEffect}`;
-
-      const badgeEl = document.getElementById('previewBadge');
-      if (badgeText) {
-        badgeEl.innerText = badgeText;
-        badgeEl.className = `user-badge ${badgeStyle}`;
-        badgeEl.classList.remove('hidden');
-      } else {
-        badgeEl.classList.add('hidden');
-      }
-    }
-
-    function triggerPfpUpload() {
-      document.getElementById('profilePfpInput').click();
-    }
-
-    function handlePfpFileSelect(e) {
-      const file = e.target.files[0];
-      if (file) {
-        compressImage(file, (base64) => {
-          document.getElementById('customPfpPreview').src = base64;
-        });
-      }
-    }
-
-    function saveProfileCustomization() {
-      currentUser.displayName = document.getElementById('editDisplayName').value.trim() || currentUser.username;
-      currentUser.customBadge = document.getElementById('editCustomBadge').value.trim();
-      currentUser.badgeStyle = document.getElementById('editBadgeStyle').value;
-      currentUser.nameEffect = document.getElementById('editNameEffect').value;
-      currentUser.status = document.getElementById('editStatusMessage').value.trim() || 'Available';
-      currentUser.pfp = document.getElementById('customPfpPreview').src;
-
+    function saveProfile() {
+      currentUser.name = document.getElementById('editName').value;
+      currentUser.badge = document.getElementById('editBadge').value;
       users[currentUser.username] = currentUser;
-      saveUsers();
-      saveCurrentUser();
-      updateUserHeaderUI();
-      renderChatList();
-      if (activeChatUsername) renderActiveMessages();
-
-      if (broadcastChannel) broadcastChannel.postMessage({ type: 'SYNC_USERS', users });
-      closeProfileCustomization();
+      localStorage.setItem('cv_users', JSON.stringify(users));
+      loadApp();
+      toggleProfile(false);
     }
 
-    // Image Compressor Helper
-    function compressImage(file, callback) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          const maxDim = 300;
-          if (width > height && width > maxDim) {
-            height *= maxDim / width;
-            width = maxDim;
-          } else if (height > maxDim) {
-            width *= maxDim / height;
-            height = maxDim;
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          callback(canvas.toDataURL('image/jpeg', 0.8));
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    function changePfp() {
+      const newUrl = prompt("Enter Image URL for PFP:");
+      if(newUrl) {
+        currentUser.pfp = newUrl;
+        document.getElementById('profilePfp').src = newUrl;
+      }
     }
 
-    // Chat List & Messaging Logic
-    function promptNewChat() {
-      const targetUser = prompt('Enter username to start chat:');
-      if (!targetUser) return;
-      const normalized = targetUser.trim().toLowerCase();
-      if (normalized === currentUser.username) {
-        alert('You cannot start a chat with yourself!');
-        return;
+    // Chat Logic
+    function startNewChat() {
+      const target = prompt("Enter username to chat with:").toLowerCase();
+      if(target && target !== currentUser.username) {
+        activeChat = target;
+        renderChatList();
+        renderMessages();
       }
-      if (!users[normalized]) {
-        // Create user placeholder if not exists
-        users[normalized] = {
-          username: normalized,
-          displayName: targetUser,
-          pfp: `https://api.dicebear.com/7.x/bottts/svg?seed=${normalized}`,
-          status: 'Offline'
-        };
-        saveUsers();
-      }
-      selectChat(normalized);
     }
 
     function renderChatList() {
-      const chatListEl = document.getElementById('chatList');
-      chatListEl.innerHTML = '';
-
-      // Get list of unique users interacted with
-      const chatPartners = new Set(Object.keys(users).filter(u => u !== currentUser.username));
-      messages.forEach(m => {
-        if (m.sender === currentUser.username) chatPartners.add(m.receiver);
-        if (m.receiver === currentUser.username) chatPartners.add(m.sender);
-      });
-
-      chatPartners.forEach(uKey => {
-        const userObj = users[uKey] || { username: uKey, displayName: uKey, pfp: `https://api.dicebear.com/7.x/bottts/svg?seed=${uKey}` };
-        
-        // Compute last message and unread count
-        const threadMsgs = messages.filter(m => 
-          (m.sender === currentUser.username && m.receiver === uKey) ||
-          (m.sender === uKey && m.receiver === currentUser.username)
-        );
-        const lastMsg = threadMsgs[threadMsgs.length - 1];
-        const unreadCount = threadMsgs.filter(m => m.receiver === currentUser.username && !m.read).length;
-
-        const item = document.createElement('div');
-        item.className = `chat-item ${activeChatUsername === uKey ? 'active' : ''}`;
-        item.onclick = () => selectChat(uKey);
-
-        item.innerHTML = `
-          <img class="avatar" src="${userObj.pfp}" alt="Avatar" />
-          <div class="chat-meta">
-            <div class="chat-top-row">
-              <div class="chat-title">
-                <span class="${userObj.nameEffect || ''}">${userObj.displayName || userObj.username}</span>
-                ${userObj.customBadge ? `<span class="user-badge ${userObj.badgeStyle || 'badge-emerald'}">${userObj.customBadge}</span>` : ''}
-              </div>
-              ${lastMsg ? `<div class="chat-time">${formatTime(lastMsg.timestamp)}</div>` : ''}
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="chat-preview">${lastMsg ? escapeHTML(lastMsg.text) : 'Click to start chatting'}</div>
-              ${unreadCount > 0 ? `<div class="unread-badge">${unreadCount}</div>` : ''}
-            </div>
-          </div>
-        `;
-        chatListEl.appendChild(item);
-      });
-    }
-
-    function selectChat(username) {
-      activeChatUsername = username;
-      const targetObj = users[username] || { username, displayName: username, pfp: `https://api.dicebear.com/7.x/bottts/svg?seed=${username}` };
+      const list = document.getElementById('chatList');
+      list.innerHTML = '';
       
-      // Mark read
-      messages.forEach(m => {
-        if (m.sender === username && m.receiver === currentUser.username) {
-          m.read = true;
-        }
+      // Get unique users we have talked to
+      const contacts = [...new Set(messages.filter(m => m.to === currentUser.username || m.from === currentUser.username).map(m => m.to === currentUser.username ? m.from : m.to))];
+      if(activeChat && !contacts.includes(activeChat)) contacts.push(activeChat);
+
+      contacts.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'chat-item';
+        item.onclick = () => { activeChat = c; renderMessages(); };
+        item.innerHTML = `<img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${c}" class="avatar"> <div>${c}</div>`;
+        list.appendChild(item);
       });
-      saveMessages();
-
-      // UI update
-      document.getElementById('activeChatAvatar').src = targetObj.pfp;
-      document.getElementById('activeChatTitle').innerHTML = `
-        <span class="${targetObj.nameEffect || ''}">${targetObj.displayName || targetObj.username}</span>
-        ${targetObj.customBadge ? `<span class="user-badge ${targetObj.badgeStyle || 'badge-emerald'}">${targetObj.customBadge}</span>` : ''}
-      `;
-      document.getElementById('activeChatStatus').innerText = targetObj.status || 'Online';
-
-      if (window.innerWidth <= 768) {
-        document.getElementById('mainChat').classList.add('mobile-active');
-        document.getElementById('mobileBackBtn').classList.remove('hidden');
-      }
-
-      renderChatList();
-      renderActiveMessages();
     }
 
-    function closeMobileChat() {
-      document.getElementById('mainChat').classList.remove('mobile-active');
-    }
-
-    function renderActiveMessages() {
+    function renderMessages() {
+      if(!activeChat) return;
+      document.getElementById('chatHeader').innerText = "Chatting with: " + activeChat;
       const container = document.getElementById('chatMessages');
       container.innerHTML = '';
-
-      if (!activeChatUsername) return;
-
-      const threadMsgs = messages.filter(m => 
-        (m.sender === currentUser.username && m.receiver === activeChatUsername) ||
-        (m.sender === activeChatUsername && m.receiver === currentUser.username)
-      );
-
-      threadMsgs.forEach(m => {
-        const isSelf = m.sender === currentUser.username;
-        const senderObj = isSelf ? currentUser : (users[m.sender] || { displayName: m.sender });
-
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${isSelf ? 'sent' : 'received'}`;
-        
-        let contentHTML = escapeHTML(m.text);
-        if (m.text.startsWith('http') && (m.text.endsWith('.gif') || m.text.includes('giphy.com'))) {
-          contentHTML = `<img src="${m.text}" style="max-width: 100%; border-radius: 8px;" />`;
-        }
-
-        msgDiv.innerHTML = `
-          <div class="message-content">
-            ${!isSelf ? `<div class="message-sender ${senderObj.nameEffect || ''}">
-              ${senderObj.displayName || senderObj.username}
-              ${senderObj.customBadge ? `<span class="user-badge ${senderObj.badgeStyle || 'badge-emerald'}">${senderObj.customBadge}</span>` : ''}
-            </div>` : ''}
-            <div>${contentHTML}</div>
-            <div class="message-meta">
-              <span>${formatTime(m.timestamp)}</span>
-              ${isSelf ? `<i class="fa-solid ${m.read ? 'fa-check-double' : 'fa-check'}" style="color: ${m.read ? '#53bdeb' : 'inherit'}; margin-left: 2px;"></i>` : ''}
-            </div>
-          </div>
-        `;
-        container.appendChild(msgDiv);
+      
+      messages.filter(m => (m.from === currentUser.username && m.to === activeChat) || (m.from === activeChat && m.to === currentUser.username))
+      .forEach(m => {
+        const div = document.createElement('div');
+        div.className = `message ${m.from === currentUser.username ? 'sent' : 'received'}`;
+        div.innerText = m.text;
+        container.appendChild(div);
       });
-
       container.scrollTop = container.scrollHeight;
     }
 
-    function sendMessage() {
-      const input = document.getElementById('messageInput');
-      const text = input.value.trim();
-      if (!text || !activeChatUsername || !currentUser) return;
+    function sendMsg() {
+      const input = document.getElementById('msgInput');
+      if(!input.value || !activeChat) return;
 
-      const newMsg = {
-        id: Date.now().toString(),
-        sender: currentUser.username,
-        receiver: activeChatUsername,
-        text,
-        timestamp: Date.now(),
-        read: false
-      };
-
-      messages.push(newMsg);
-      saveMessages();
+      messages.push({ from: currentUser.username, to: activeChat, text: input.value });
+      localStorage.setItem('cv_msgs', JSON.stringify(messages));
       input.value = '';
-      
-      renderActiveMessages();
-      renderChatList();
-    }
-
-    function handleInputKey(e) {
-      if (e.key === 'Enter') sendMessage();
-    }
-
-    // Emojis & GIFs Picker Logic
-    let currentPickerTab = 'emojis';
-    const EMOJI_LIST = ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😋','😛','😜','🤪','🤨','🧐','🤓','😎','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬','🤯','😳','🥵','🥶','😱','😨','😰','😥','😓','🤗','🤔','🤭','🤫','🤥','😶','😐','😑','😬','🙄','😯','😦','😧','😮','😲','🥱','😴','🤤','😪','😵','🤐','🥴','🤢','🤮','🤧','😷','🤒','🤕','🤑','🤠','😈','👿','👹','👺','🤡','💩','👻','💀','☠️','👽','👾','🤖','🎃','😺','😸','😹','😻','😼','😽','🙀','😿','😾'];
-    const FLAG_LIST = ['🏳️','🏴','🏴‍☠️','🏁','🚩','🇦🇫','🇦🇱','🇩🇿','🇦🇸','🇦🇩','🇦🇴','🇦🇮','🇦🇶','🇦🇬','🇦🇷','🇦🇲','🇦🇼','🇦🇺','🇦🇹','🇦🇿','🇧🇸','🇧🇭','🇧🇩','🇧🇧','🇧🇾','🇧🇪','🇧🇿','🇧🇯','🇧🇲','🇧🇹','🇧🇴','🇧🇦','🇧🇼','🇧🇷','🇮🇴','🇻🇬','🇧🇳','🇧🇬','🇧🇫','🇧🇮','🇰🇭','🇨🇲','🇨🇦','🇮🇨','🇨🇻','🇧🇶','🇰🇾','🇨🇫','🇹🇩','🇨🇱','🇨🇳','🇨🇽','🇨🇨','🇨🇴','🇰🇲','🇨🇬','🇨🇩','🇨🇰','🇨🇷','🇨🇮','🇭🇷','🇨🇺','🇨🇼','🇨🇾','🇨🇿','🇩🇰','🇩🇯','🇩🇲','🇩🇴','🇪🇨','🇪🇬','🇸🇻','🇬🇶','🇪🇷','🇪🇪','🇸🇿','🇪🇹','🇪🇺','🇫🇰','🇫🇴','🇫🇯','🇫🇮','🇫🇷','🇬🇫','🇵🇫','🇹🇫','🇬🇦','🇬🇲','🇬🇪','🇩🇪','🇬🇭','🇬🇮','🇬🇷','🇬🇱','🇬🇩','🇬🇵','🇬🇺','🇬🇹','🇬🇬','🇬🇳','🇬🇼','🇬🇾','🇭🇹','🇭🇳','🇭🇰','🇭🇺','🇮🇸','🇮🇳','🇮🇩','🇮🇷','🇮🇶','🇮🇪','🇮🇲','🇮🇱','🇮🇹','🇯🇲','🇯🇵','🇯🇪','🇯🇴','🇰🇿','🇰🇪','🇰🇮','🇽🇰','🇰🇼','🇰🇬','🇱🇦','🇱🇻','🇱🇧','🇱🇸','🇱🇷','🇱🇾','🇱🇮','🇱🇹','🇱🇺','🇲🇴','🇲🇬','🇲🇼','🇲🇾','🇲🇻','🇲🇱','🇲🇹','🇲🇭','🇲🇶','🇲🇷','🇲🇺','🇾🇹','🇲🇽','🇫🇲','🇲🇩','🇲🇨','🇲🇳','🇲🇪','🇲🇸','🇲🇦','🇲🇿','🇲🇲','🇳🇦','🇳🇷','🇳🇵','🇳🇱','🇳🇨','🇳🇿','🇳🇮','🇳🇪','🇳🇬','🇳🇺','🇳🇫','🇰🇵','🇲🇰','🇲🇵','🇳🇴','🇴🇲','🇵🇰','🇵🇼','🇵🇸','🇵🇦','🇵🇬','🇵🇾','🇵🇪','🇵🇭','🇵🇳','🇵🇱','🇵🇹','🇵🇷','🇶🇦','🇷🇪','🇷🇴','🇷🇺','🇷🇼','🇼🇸','🇸🇲','🇸🇹','🇸🇦','🇸🇳','🇷🇸','🇸🇨','🇸🇱','🇸🇬','🇸🇽','🇸🇰','🇸🇮','🇸🇧','🇸🇴','🇿🇦','🇰🇷','🇸🇸','🇪🇸','🇱🇰','🇧🇱','🇸🇭','🇰🇳','🇱🇨','🇵🇲','🇻🇨','🇸🇩','🇸🇷','🇸🇯','🇸🇪','🇨🇭','🇸🇾','🇹🇼','🇹🇯','🇹🇿','🇹🇭','🇹🇱','🇹🇬','🇹🇰','🇹🇴','🇹🇹','🇹🇳','🇹🇷','🇹🇲','🇹🇨','🇹🇻','🇺🇬','🇺🇦','🇦🇪','🇬🇧','🇺🇸','🇺🇾','🇺🇿','🇻🇺','🇻🇦','🇻🇪','🇻🇳','🇼🇫','🇪🇭','🇾🇪','🇿🇲','🇿🇼'];
-    const GIF_LIST = [
-      'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y2bXExdXV6ZnBrOWR3dWZwaDlzZmtudnR4azRpdXZocWVrZWhmOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0HlHFRbmaZtBRhXG/giphy.gif',
-      'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzRxeXBsbGpkbTFwY2R6OW85ZjB3NmNpNWRtYndpNXNsd3JsdWhzNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26fb5S8fMHg5i/giphy.gif',
-      'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmNzaWh2c3BqNWYwbnhuYWdsaGRtZmsxYmtndnl5aXNxeDlsdmZzOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKsjLu1R17bC7T2/giphy.gif',
-      'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNm45NW80MXRwODlzZnk3YnUzaXAzNmlnNmFlYnlqbjZhcndyOW54MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/d31w24psGYeekCXY/giphy.gif'
-    ];
-
-    function togglePicker() {
-      const drawer = document.getElementById('pickerDrawer');
-      drawer.classList.toggle('active');
-      if (drawer.classList.contains('active')) switchPickerTab(currentPickerTab);
-    }
-
-    function switchPickerTab(tab) {
-      currentPickerTab = tab;
-      document.querySelectorAll('.picker-tab').forEach(t => t.classList.remove('active'));
-      event?.target?.classList?.add('active');
-
-      const content = document.getElementById('pickerContent');
-      content.className = 'picker-content';
-      content.innerHTML = '';
-
-      if (tab === 'emojis') {
-        EMOJI_LIST.forEach(emoji => {
-          const item = document.createElement('span');
-          item.style.cursor = 'pointer';
-          item.innerText = emoji;
-          item.onclick = () => insertTextAtCursor(emoji);
-          content.appendChild(item);
-        });
-      } else if (tab === 'flags') {
-        FLAG_LIST.forEach(flag => {
-          const item = document.createElement('span');
-          item.style.cursor = 'pointer';
-          item.innerText = flag;
-          item.onclick = () => insertTextAtCursor(flag);
-          content.appendChild(item);
-        });
-      } else if (tab === 'gifs') {
-        content.classList.add('gif-grid');
-        GIF_LIST.forEach(url => {
-          const img = document.createElement('img');
-          img.src = url;
-          img.className = 'gif-item';
-          img.onclick = () => {
-            document.getElementById('messageInput').value = url;
-            sendMessage();
-            document.getElementById('pickerDrawer').classList.remove('active');
-          };
-          content.appendChild(img);
-        });
-      }
-    }
-
-    function insertTextAtCursor(text) {
-      const input = document.getElementById('messageInput');
-      input.value += text;
-      input.focus();
-    }
-
-    // Sidebar Drag Resizer
-    function initSidebarResize() {
-      const resizer = document.getElementById('sidebarResizer');
-      const sidebar = document.getElementById('sidebar');
-      let isResizing = false;
-
-      resizer.addEventListener('mousedown', () => {
-        isResizing = true;
-        resizer.classList.add('active');
-      });
-
-      document.addEventListener('mousemove', (e) => {
-        if (!isResizing) return;
-        let newWidth = e.clientX;
-        if (newWidth < 260) newWidth = 260;
-        if (newWidth > 500) newWidth = 500;
-        sidebar.style.width = `${newWidth}px`;
-      });
-
-      document.addEventListener('mouseup', () => {
-        isResizing = false;
-        resizer.classList.remove('active');
-      });
-    }
-
-    // Utilities
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, tag => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-      }[tag] || tag));
+      renderMessages();
     }
   </script>
 </body>
