@@ -11,7 +11,7 @@
       --bg-sidebar: #111b21;
       --bg-header: #202c33;
       --bg-chat: #0b141a;
-      --bg-input: #1d232a; /* Matched from screenshot */
+      --bg-input: #1d232a;
       --accent-primary: #00a884;
       --text-main: #e9edef;
       --text-muted: #8696a0;
@@ -22,7 +22,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { height: 100vh; background: var(--bg-main); color: var(--text-main); overflow: hidden; }
 
-    /* --- RAINBOW ANIMATION --- */
+    /* --- RAINBOW OWNER ANIMATION --- */
     @keyframes rainbowText {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -38,18 +38,18 @@
     }
     .owner-badge {
       background: linear-gradient(135deg, #00c89e, #005c4b);
-      color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px;
+      color: white; font-size: 10px; padding: 2px 8px; border-radius: 4px;
       margin-left: 8px; font-weight: 800; text-transform: uppercase;
+      box-shadow: 0 0 10px rgba(0, 168, 132, 0.3);
     }
 
-    /* --- LAYOUT --- */
     #app { display: flex; height: 100vh; }
 
     /* --- SIDEBAR --- */
     .sidebar { width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
     .sidebar-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-header); }
     
-    /* NEW CHAT BUTTON (From Screenshot) */
+    /* NEW CHAT BUTTON (Exact Screenshot Style) */
     .new-chat-btn {
       background: var(--bg-input);
       color: white;
@@ -63,59 +63,63 @@
       text-align: left;
       transition: 0.2s;
     }
-    .new-chat-btn:hover { background: #2a333c; }
+    .new-chat-btn:hover { background: #2a333c; border-color: var(--accent-primary); }
 
     .chat-list { flex: 1; overflow-y: auto; }
-    .chat-item { padding: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .chat-item { padding: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); }
     .chat-item:hover { background: rgba(255,255,255,0.05); }
 
-    .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #333; }
+    .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #333; border: 1px solid rgba(255,255,255,0.1); }
 
-    /* --- PROFILE VIEW (From Screenshot) --- */
+    /* --- PROFILE VIEW --- */
     .profile-view {
       position: fixed; inset: 0; background: #0f171e; z-index: 100;
       display: none; flex-direction: column;
     }
     .profile-view.active { display: flex; }
-    .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; font-size: 18px; font-weight: bold; }
+    .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; font-size: 18px; font-weight: bold; background: var(--bg-header); }
     
     .profile-content { 
-      max-width: 400px; margin: 0 auto; width: 100%; padding: 20px; 
+      max-width: 400px; margin: 0 auto; width: 100%; padding: 40px 20px; 
       display: flex; flex-direction: column; align-items: center;
     }
 
-    .pfp-container { position: relative; margin-bottom: 20px; }
-    .pfp-main { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #1d232a; }
+    .pfp-container { position: relative; margin-bottom: 25px; }
+    .pfp-main { width: 130px; height: 130px; border-radius: 50%; border: 4px solid #1d232a; cursor: pointer; transition: transform 0.2s; }
+    .pfp-main:hover { transform: scale(1.05); }
     
-    .profile-name-display { font-size: 22px; font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; }
-    .pfp-hint { color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
+    .profile-name-display { font-size: 24px; font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; }
+    .pfp-hint { color: var(--text-muted); font-size: 13px; margin-bottom: 35px; }
 
-    .input-group { width: 100%; margin-bottom: 20px; text-align: left; }
-    .input-group label { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; }
+    .input-group { width: 100%; margin-bottom: 20px; }
+    .input-group label { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; font-weight: 700; }
     .profile-input {
       width: 100%; background: var(--bg-input); border: 1px solid #2a333c;
-      padding: 12px; border-radius: 8px; color: white; outline: none;
+      padding: 14px; border-radius: 10px; color: white; outline: none; font-size: 15px;
     }
+    .profile-input:focus { border-color: var(--accent-primary); }
 
     .save-btn {
-      width: 100%; padding: 15px; background: #00a884; color: white;
+      width: 100%; padding: 16px; background: #00a884; color: white;
       border: none; border-radius: 12px; font-weight: bold; font-size: 16px;
-      cursor: pointer; margin-top: 10px;
+      cursor: pointer; margin-top: 15px; transition: 0.2s;
     }
+    .save-btn:hover { background: #00c89e; }
 
     /* --- MAIN CHAT --- */
     .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); }
     .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-    .message { max-width: 70%; padding: 10px 15px; border-radius: 10px; font-size: 14px; }
-    .sent { align-self: flex-end; background: var(--accent-primary); color: white; }
-    .received { align-self: flex-start; background: var(--bg-header); color: white; }
+    .message { max-width: 70%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.4; }
+    .sent { align-self: flex-end; background: var(--accent-primary); color: white; border-bottom-right-radius: 2px; }
+    .received { align-self: flex-start; background: var(--bg-header); color: white; border-bottom-left-radius: 2px; }
     
-    .input-area { padding: 15px; background: var(--bg-header); display: flex; gap: 10px; }
-    .chat-field { flex: 1; background: var(--bg-input); border: none; padding: 12px; border-radius: 8px; color: white; outline: none; }
+    .input-area { padding: 15px; background: var(--bg-header); display: flex; gap: 12px; align-items: center; }
+    .chat-field { flex: 1; background: var(--bg-input); border: none; padding: 14px; border-radius: 25px; color: white; outline: none; }
 
-    /* --- AUTH --- */
+    /* --- AUTH SCREEN --- */
     .auth-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 200; display: flex; align-items: center; justify-content: center; }
-    .auth-card { background: var(--bg-sidebar); padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
+    .auth-card { background: var(--bg-sidebar); padding: 40px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
+    .auth-logo { color: var(--accent-primary); font-size: 32px; font-weight: 800; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -123,11 +127,11 @@
   <!-- AUTH SCREEN -->
   <div id="authScreen" class="auth-screen">
     <div class="auth-card">
-      <h2 style="margin-bottom: 20px;">Welcome to ChatVerse</h2>
-      <input type="text" id="loginUser" class="profile-input" style="margin-bottom: 10px;" placeholder="Username">
-      <input type="password" id="loginPass" class="profile-input" style="margin-bottom: 20px;" placeholder="Password">
-      <button class="save-btn" onclick="handleLogin()">Login / Sign Up</button>
-      <p style="margin-top: 15px; font-size: 12px; color: gray;">Owner: owner | aynzoneloverisok</p>
+      <div class="auth-logo">ChatVerse</div>
+      <p style="color: var(--text-muted); margin-bottom: 30px;">Login to your account</p>
+      <input type="text" id="loginUser" class="profile-input" style="margin-bottom: 12px;" placeholder="Username">
+      <input type="password" id="loginPass" class="profile-input" style="margin-bottom: 25px;" placeholder="Password">
+      <button class="save-btn" onclick="handleLogin()">Sign In</button>
     </div>
   </div>
 
@@ -135,27 +139,28 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-header">
-        <img id="myAvatarIcon" src="" class="avatar" onclick="toggleProfile(true)" style="cursor:pointer">
-        <h3 id="myUsernameDisplay">ChatVerse</h3>
-        <button onclick="location.reload()" style="background:none; border:none; color:white; cursor:pointer"><i class="fa-solid fa-power-off"></i></button>
+        <div style="display:flex; align-items:center; gap:12px">
+            <img id="myAvatarIcon" src="" class="avatar" onclick="toggleProfile(true)" style="cursor:pointer">
+            <span id="myUsernameDisplay" style="font-weight:700"></span>
+        </div>
+        <button onclick="location.reload()" style="background:none; border:none; color:var(--text-muted); cursor:pointer"><i class="fa-solid fa-right-from-bracket"></i></button>
       </div>
 
       <button class="new-chat-btn" onclick="startNewChat()">New Chat</button>
 
-      <div class="chat-list" id="chatList">
-        <!-- Chats appear here -->
-      </div>
+      <div class="chat-list" id="chatList"></div>
     </div>
 
     <!-- MAIN CHAT -->
     <div class="main-chat">
-      <div id="chatHeader" style="padding: 15px; background: var(--bg-header); border-bottom: 1px solid var(--border-color); font-weight: bold;">
-        Select a chat to start
+      <div id="chatHeader" style="padding: 18px; background: var(--bg-header); border-bottom: 1px solid var(--border-color); font-weight: bold; display: flex; align-items:center; gap:10px">
+        Select a chat to begin
       </div>
       <div class="chat-messages" id="chatMessages"></div>
       <div class="input-area">
-        <input type="text" id="msgInput" class="chat-field" placeholder="Type a message...">
-        <button onclick="sendMsg()" class="save-btn" style="width: auto; padding: 10px 20px; margin: 0;">Send</button>
+        <button style="background:none; border:none; color:var(--text-muted); font-size:20px"><i class="fa-regular fa-face-smile"></i></button>
+        <input type="text" id="msgInput" class="chat-field" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMsg()">
+        <button onclick="sendMsg()" style="background:var(--accent-primary); color:white; border:none; width:45px; height:45px; border-radius:50%; cursor:pointer"><i class="fa-solid fa-paper-plane"></i></button>
       </div>
     </div>
   </div>
@@ -168,12 +173,15 @@
     </div>
     
     <div class="profile-content">
-      <div class="pfp-container">
-        <img id="profilePfp" src="https://api.dicebear.com/7.x/avataaars/svg?seed=1" class="pfp-main" onclick="changePfp()">
+      <div class="pfp-container" onclick="changePfp()">
+        <img id="profilePfp" src="" class="pfp-main">
+        <div style="position:absolute; bottom:5px; right:5px; background:var(--accent-primary); width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:3px solid #0f171e">
+            <i class="fa-solid fa-camera" style="font-size:12px; color:white"></i>
+        </div>
       </div>
       
       <div class="profile-name-display">
-        <span id="displayNameView">Name</span>
+        <span id="displayNameView"></span>
         <span id="badgeView" class="owner-badge">OWNER</span>
       </div>
       <div class="pfp-hint">Click PFP above to change image</div>
@@ -193,17 +201,20 @@
   </div>
 
   <script>
+    // Security: Scrambled password check (Base64)
+    const _KEY = "YXluem9uZWxvdmVyaXNraw=="; 
+
     let currentUser = null;
     let users = JSON.parse(localStorage.getItem('cv_users')) || {};
     let messages = JSON.parse(localStorage.getItem('cv_msgs')) || [];
     let activeChat = null;
 
-    // Login Logic
     function handleLogin() {
       const u = document.getElementById('loginUser').value.toLowerCase();
       const p = document.getElementById('loginPass').value;
 
-      if(u === 'owner' && p === 'aynzoneloverisok') {
+      // Checks if the typed password matches the scrambled key
+      if(u === 'owner' && btoa(p) === _KEY) {
         if(!users[u]) {
           users[u] = { username: 'owner', name: 'AynzonePlayz[OWNER]', badge: 'OWNER', pfp: 'https://api.dicebear.com/7.x/bottts/svg?seed=vampire' };
         }
@@ -216,16 +227,18 @@
       if(currentUser) {
         document.getElementById('authScreen').style.display = 'none';
         loadApp();
+      } else {
+        alert("Invalid login details.");
       }
     }
 
     function loadApp() {
       document.getElementById('myAvatarIcon').src = currentUser.pfp;
       document.getElementById('myUsernameDisplay').innerText = currentUser.name;
+      if(currentUser.username === 'owner') document.getElementById('myUsernameDisplay').className = 'rainbow-text';
       renderChatList();
     }
 
-    // Profile Logic
     function toggleProfile(show) {
       if(show) {
         document.getElementById('profilePfp').src = currentUser.pfp;
@@ -243,7 +256,7 @@
       const badge = document.getElementById('editBadge').value;
       const nameEl = document.getElementById('displayNameView');
       
-      nameEl.innerText = name;
+      nameEl.innerText = name || currentUser.username;
       if(currentUser.username === 'owner') nameEl.className = 'rainbow-text';
       
       const bView = document.getElementById('badgeView');
@@ -261,14 +274,13 @@
     }
 
     function changePfp() {
-      const newUrl = prompt("Enter Image URL for PFP:");
+      const newUrl = prompt("Enter Image URL for your Profile Picture:");
       if(newUrl) {
         currentUser.pfp = newUrl;
         document.getElementById('profilePfp').src = newUrl;
       }
     }
 
-    // Chat Logic
     function startNewChat() {
       const target = prompt("Enter username to chat with:").toLowerCase();
       if(target && target !== currentUser.username) {
@@ -281,23 +293,22 @@
     function renderChatList() {
       const list = document.getElementById('chatList');
       list.innerHTML = '';
-      
-      // Get unique users we have talked to
       const contacts = [...new Set(messages.filter(m => m.to === currentUser.username || m.from === currentUser.username).map(m => m.to === currentUser.username ? m.from : m.to))];
       if(activeChat && !contacts.includes(activeChat)) contacts.push(activeChat);
 
       contacts.forEach(c => {
         const item = document.createElement('div');
         item.className = 'chat-item';
-        item.onclick = () => { activeChat = c; renderMessages(); };
-        item.innerHTML = `<img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${c}" class="avatar"> <div>${c}</div>`;
+        if(activeChat === c) item.style.background = 'rgba(255,255,255,0.08)';
+        item.onclick = () => { activeChat = c; renderMessages(); renderChatList(); };
+        item.innerHTML = `<img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${c}" class="avatar"> <div><div style="font-weight:bold">${c}</div><div style="font-size:12px; color:gray">Online</div></div>`;
         list.appendChild(item);
       });
     }
 
     function renderMessages() {
       if(!activeChat) return;
-      document.getElementById('chatHeader').innerText = "Chatting with: " + activeChat;
+      document.getElementById('chatHeader').innerHTML = `<img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${activeChat}" class="avatar" style="width:30px; height:30px"> ` + activeChat;
       const container = document.getElementById('chatMessages');
       container.innerHTML = '';
       
@@ -314,7 +325,6 @@
     function sendMsg() {
       const input = document.getElementById('msgInput');
       if(!input.value || !activeChat) return;
-
       messages.push({ from: currentUser.username, to: activeChat, text: input.value });
       localStorage.setItem('cv_msgs', JSON.stringify(messages));
       input.value = '';
